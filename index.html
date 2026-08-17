@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>macOS 27 — Mammoth · Liquid Glass</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%23fff' d='M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/glass.css">
+<link rel="stylesheet" href="css/shell.css">
+<link rel="stylesheet" href="css/apps.css">
+</head>
+<body class="boot">
+
+<!-- Global SVG defs: liquid refraction lens + helpers -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="lens" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+      <feTurbulence type="turbulence" baseFrequency="0.011 0.014" numOctaves="2" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="lens-soft" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.01" numOctaves="2" seed="3" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<!-- Boot sequence -->
+<div id="boot" class="hidden">
+  <div class="boot-logo">
+    <svg viewBox="0 0 384 512" width="76" height="76"><path fill="#fff" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+  </div>
+  <div class="boot-bar"><div class="boot-fill"></div></div>
+</div>
+
+<!-- Lock screen -->
+<div id="lockscreen" class="hidden">
+  <div class="lock-clock"><span id="lock-time">9:41</span></div>
+  <div class="lock-date" id="lock-date">Thursday, June 4</div>
+  <div class="lock-user" id="lock-user">
+    <div class="lock-avatar">Y</div>
+    <div class="lock-name">You</div>
+    <div class="lock-hint">Touch ID or press Enter to unlock</div>
+  </div>
+  <div class="lock-foot">macOS 27 · Mammoth · Liquid Glass</div>
+</div>
+
+<!-- Liquid Glass stage -->
+<canvas id="wallpaper" aria-hidden="true"></canvas>
+<canvas id="refract" aria-hidden="true"></canvas>
+<div id="grain" aria-hidden="true"></div>
+<div id="brightness" aria-hidden="true"></div>
+
+<div id="desktop"></div>
+<div id="windows"></div>
+
+<!-- Overlays -->
+<div id="spotlight" class="overlay hidden"></div>
+<div id="launchpad" class="overlay hidden"></div>
+<div id="mission" class="overlay hidden"></div>
+<div id="switcher" class="overlay hidden"></div>
+<div id="control" class="hidden"></div>
+<div id="menus"></div>
+<div id="widgets"></div>
+<div id="snap-preview" class="hidden"></div>
+
+<nav id="menubar" aria-label="Menu bar"></nav>
+<footer id="dock" aria-label="Dock"></footer>
+
+<div id="toasts"></div>
+<div id="contextmenu" class="hidden"></div>
+<div id="dialogs"></div>
+
+<script src="js/util.js"></script>
+<script src="js/store.js"></script>
+<script src="js/fs.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/wallpaper.js"></script>
+<script src="js/glass.js"></script>
+<script src="js/wm.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/dock.js"></script>
+<script src="js/overlays.js"></script>
+<script src="js/menubar.js"></script>
+<script src="js/apps/textedit.js"></script>
+<script src="js/apps/preview.js"></script>
+<script src="js/apps/finder.js"></script>
+<script src="js/apps/safari.js"></script>
+<script src="js/apps/notes.js"></script>
+<script src="js/apps/mail.js"></script>
+<script src="js/apps/messages.js"></script>
+<script src="js/apps/calendar.js"></script>
+<script src="js/apps/photos.js"></script>
+<script src="js/apps/music.js"></script>
+<script src="js/apps/calculator.js"></script>
+<script src="js/apps/terminal.js"></script>
+<script src="js/apps/settings.js"></script>
+<script src="js/apps/about.js"></script>
+<script src="js/assistant.js"></script>
+<script src="js/shell.js"></script>
+</body>
+</html>
